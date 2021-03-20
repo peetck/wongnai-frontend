@@ -17,13 +17,14 @@ exports.getTrips = async (req, res, next) => {
     const trips = await response.json();
 
     if (keyword) {
-      const filteredTrips = trips.filter(
-        (trip) =>
-          trip.title.toLowerCase().includes(keyword.toLowerCase()) ||
-          trip.description.toLowerCase().includes(keyword.toLowerCase()) ||
-          // TODO: tags lower case
-          trip.tags.includes(keyword)
-      );
+      const filteredTrips = trips.filter((trip) => {
+        const lcKeyword = keyword.toLowerCase();
+        return (
+          trip.title.toLowerCase().includes(lcKeyword) ||
+          trip.description.toLowerCase().includes(lcKeyword) ||
+          trip.tags.includes(lcKeyword)
+        );
+      });
       return res.json(filteredTrips);
     }
 

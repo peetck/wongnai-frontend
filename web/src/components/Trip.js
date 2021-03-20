@@ -42,7 +42,11 @@ const Content = styled.div`
   flex: 1;
   margin-bottom: 15px;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
+`;
+
+const Detail = styled.div`
+  margin-top: 10px;
 `;
 
 const Title = styled.a`
@@ -71,6 +75,7 @@ const ReadMore = styled.a`
 const Categories = styled.p`
   color: #a1a1a1;
   font-size: 16px;
+  margin: auto 0;
   @media (max-width: 1024px) {
     margin-top: 15px;
     margin-bottom: 10px;
@@ -120,7 +125,7 @@ const Trip = (props) => {
       <MainImage src={photos[0]} alt="unable to load image" />
       <Container>
         <Content>
-          <div>
+          <Detail>
             <Title href={url} target="_blank" rel="noopener noreferrer">
               {title}
             </Title>
@@ -130,9 +135,9 @@ const Trip = (props) => {
                 อ่านต่อ
               </ReadMore>
             </Description>
-          </div>
+          </Detail>
           <Categories>
-            หมวด •{" "}
+            หมวด : {" "}
             {tags.slice(0, tags.length - 1).map((tag) => (
               <span key={eid + tag}>
                 <Underline onClick={categoryClickedHandler}>{tag}</Underline>{" "}

@@ -6,9 +6,10 @@ const TripContainer = styled.div`
   width: 100%;
   height: 450px;
   margin-bottom: 55px;
-  /* @media (max-width: 1024px) {
+  @media (max-width: 1024px) {
     flex-direction: column;
-  } */
+    height: auto;
+  }
 `;
 
 const MainImage = styled.img`
@@ -16,6 +17,17 @@ const MainImage = styled.img`
   object-fit: cover;
   padding: 15px;
   border-radius: 40px;
+  @media (max-width: 1024px) {
+    width: 100%;
+    height: 400px;
+    padding: 15px 0;
+  }
+  @media (max-width: 768px) {
+    height: 350px;
+  }
+  @media (max-width: 640px) {
+    height: 300px;
+  }
 `;
 
 const Container = styled.div`
@@ -38,26 +50,39 @@ const Title = styled.a`
   font-weight: bold;
   text-decoration: none;
   color: black;
+  &:hover {
+    opacity: 0.7;
+  }
 `;
 
 const Description = styled.p`
-  color: grey;
+  color: #a1a1a1;
   font-size: 18px;
   margin-top: 10px;
 `;
 
 const ReadMore = styled.a`
   color: #2c9cda;
+  &:hover {
+    opacity: 0.7;
+  }
 `;
 
 const Categories = styled.p`
-  color: grey;
+  color: #a1a1a1;
   font-size: 16px;
+  @media (max-width: 1024px) {
+    margin-top: 15px;
+    margin-bottom: 10px;
+  }
 `;
 
 const Underline = styled.span`
   text-decoration: underline;
   cursor: pointer;
+  &:hover {
+    opacity: 0.7;
+  }
 `;
 
 const Flex = styled.div`
@@ -70,6 +95,13 @@ const Image = styled.img`
   margin-right: 15px;
   object-fit: cover;
   border-radius: 40px;
+  @media (max-width: 768px) {
+    width: 120px;
+    height: 120px;
+  }
+  @media (max-width: 640px) {
+    display: none;
+  }
 `;
 
 const Trip = (props) => {
@@ -100,7 +132,7 @@ const Trip = (props) => {
             </Description>
           </div>
           <Categories>
-            หมวด:{" "}
+            หมวด •{" "}
             {tags.slice(0, tags.length - 1).map((tag) => (
               <span key={eid + tag}>
                 <Underline onClick={categoryClickedHandler}>{tag}</Underline>{" "}

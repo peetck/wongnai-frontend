@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 
 import { useQuery } from "../hooks/query";
 import Trip from "../components/Trip";
+import Loader from "../components/Loader";
 
 const Page = styled.div`
   display: flex;
@@ -22,12 +23,15 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 700px;
+  width: 750px;
+  @media (max-width: 1024px) {
+    width: 70%;
+  }
 `;
 
 const Input = styled.input`
   border: 0;
-  border-bottom: 1.5px solid grey;
+  border-bottom: 1.5px solid #a1a1a1;
   text-align: center;
   font-size: 20px;
   margin: 25px 0 35px 0;
@@ -46,13 +50,21 @@ const Home = (props) => {
     query.has("keyword") ? query.get("keyword") : ""
   );
   const [trips, setTrips] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchTrips = useCallback(async () => {
-    const response = await fetch(
-      `http://localhost:8000/api/trips?keyword=${keyword}`
-    );
-    const data = await response.json();
-    setTrips(data);
+    try {
+      setIsLoading(true);
+      const response = await fetch(
+        `http://localhost:8000/api/trips?keyword=${keyword}`
+      );
+      const data = await response.json();
+      setTrips(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   }, [keyword]);
 
   useEffect(() => {
@@ -88,7 +100,9 @@ const Home = (props) => {
           value={keyword}
           onChange={inputHandler}
         />
-        {trips.length !== 0 ? (
+        {isLoading ? (
+          <Loader />
+        ) : trips.length !== 0 ? (
           trips.map((trip) => (
             <Trip
               key={trip.eid}
@@ -102,7 +116,7 @@ const Home = (props) => {
             />
           ))
         ) : (
-          <h1>ไม่เจอที่เที่ยวเลย มุแง</h1>
+          <h1>ไม่เจออะไรเลย แงๆ</h1>
         )}
       </Container>
     </Page>

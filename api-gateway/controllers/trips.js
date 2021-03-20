@@ -11,8 +11,8 @@ exports.getTrips = async (req, res, next) => {
   if (keyword) {
     const filteredTrips = trips.filter(
       (trip) =>
-        trip.title.includes(keyword) ||
-        trip.description.includes(keyword) ||
+        trip.title.toLowerCase().includes(keyword.toLowerCase()) ||
+        trip.description.toLowerCase().includes(keyword.toLowerCase()) ||
         // TODO: tags lower case
         trip.tags.includes(keyword)
     );

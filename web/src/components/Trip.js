@@ -63,6 +63,7 @@ const Description = styled.p`
   color: #a1a1a1;
   font-size: 18px;
   margin-top: 10px;
+  font-weight: lighter;
 `;
 
 const ReadMore = styled.a`
@@ -75,6 +76,7 @@ const ReadMore = styled.a`
 const Categories = styled.p`
   color: #a1a1a1;
   font-size: 16px;
+  font-weight: lighter;
   margin: auto 0;
   @media (max-width: 1024px) {
     margin-top: 15px;
@@ -137,7 +139,7 @@ const Trip = (props) => {
             </Description>
           </Detail>
           <Categories>
-            หมวด : {" "}
+            หมวด :{" "}
             {tags.slice(0, tags.length - 1).map((tag) => (
               <span key={eid + tag}>
                 <Underline onClick={categoryClickedHandler}>{tag}</Underline>{" "}

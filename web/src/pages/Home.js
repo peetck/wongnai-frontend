@@ -17,6 +17,7 @@ const Title = styled.p`
   margin-top: 1em;
   font-size: 60px;
   color: #2c9cda;
+  text-align: center;
 `;
 
 const Container = styled.div`
@@ -34,6 +35,7 @@ const Input = styled.input`
   border-bottom: 1.5px solid #a1a1a1;
   text-align: center;
   font-size: 20px;
+  font-weight: lighter;
   margin: 25px 0 35px 0;
   width: 90%;
   &:focus {
@@ -42,7 +44,17 @@ const Input = styled.input`
   }
 `;
 
-const Home = (props) => {
+const NotFound = styled.h2`
+  display: flex;
+  height: 450px;
+  justify-content: center;
+  align-items: center;
+  color: #a1a1a1;
+  text-align: center;
+  font-weight: lighter;
+`;
+
+const Home = () => {
   const history = useHistory();
   const query = useQuery();
 
@@ -58,18 +70,27 @@ const Home = (props) => {
       const response = await fetch(
         `http://localhost:8000/api/trips?keyword=${keyword}`
       );
+      if (response.status !== 200) {
+        throw new Error("Something went wrong.");
+      }
       const data = await response.json();
       setTrips(data);
     } catch (error) {
-      console.log(error);
+      // TODO: handler error
+      console.log(error.message);
     } finally {
       setIsLoading(false);
     }
   }, [keyword]);
 
   useEffect(() => {
-    fetchTrips();
-  }, [fetchTrips]);
+    const timeout = setTimeout(() => {
+      fetchTrips();
+    }, 300);
+
+    // if this effect run again, because keyword changed, we remove the previous timeout
+    return () => clearTimeout(timeout);
+  }, [keyword, fetchTrips]);
 
   const categoryClickedHandler = (e) => {
     const category = e.target.textContent;
@@ -94,8 +115,8 @@ const Home = (props) => {
       <Container>
         <Input
           type="text"
-          name=""
-          id=""
+          name="keyword"
+          id="keyword"
           placeholder="หาที่เที่ยวแล้วไปกัน..."
           value={keyword}
           onChange={inputHandler}
@@ -116,7 +137,7 @@ const Home = (props) => {
             />
           ))
         ) : (
-          <h1>ไม่เจออะไรเลย แงๆ</h1>
+          <NotFound>ไม่พบที่เที่ยว</NotFound>
         )}
       </Container>
     </Page>

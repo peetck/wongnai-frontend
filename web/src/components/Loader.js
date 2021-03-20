@@ -81,7 +81,7 @@ const Grid = styled.div`
   }
 `;
 
-const Loader = (props) => {
+const Loader = () => {
   return (
     <Container>
       <Grid>

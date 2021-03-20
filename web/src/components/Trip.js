@@ -74,6 +74,7 @@ const Image = styled.img`
 
 const Trip = (props) => {
   const {
+    eid,
     title,
     description,
     photos,
@@ -101,9 +102,9 @@ const Trip = (props) => {
           <Categories>
             หมวด:{" "}
             {tags.slice(0, tags.length - 1).map((tag) => (
-              <>
+              <span key={eid + tag}>
                 <Underline onClick={categoryClickedHandler}>{tag}</Underline>{" "}
-              </>
+              </span>
             ))}
             และ{" "}
             <Underline onClick={categoryClickedHandler}>

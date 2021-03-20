@@ -88,17 +88,22 @@ const Home = (props) => {
           value={keyword}
           onChange={inputHandler}
         />
-        {trips.map((trip) => (
-          <Trip
-            key={trip.eid}
-            title={trip.title}
-            description={trip.description}
-            photos={trip.photos}
-            url={trip.url}
-            tags={trip.tags}
-            categoryClickedHandler={categoryClickedHandler}
-          />
-        ))}
+        {trips.length !== 0 ? (
+          trips.map((trip) => (
+            <Trip
+              key={trip.eid}
+              eid={trip.eid}
+              title={trip.title}
+              description={trip.description}
+              photos={trip.photos}
+              url={trip.url}
+              tags={trip.tags}
+              categoryClickedHandler={categoryClickedHandler}
+            />
+          ))
+        ) : (
+          <h1>ไม่เจอที่เที่ยวเลย มุแง</h1>
+        )}
       </Container>
     </Page>
   );

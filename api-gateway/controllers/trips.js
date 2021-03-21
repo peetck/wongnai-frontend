@@ -5,7 +5,7 @@ const URL = "http://localhost:9000/trips";
 exports.getTrips = async (req, res, next) => {
   try {
     // get query parameters
-    const keyword = req.query.keyword;
+    const keyword = req.query.keyword.toLowerCase().trim();
 
     // send request to JSON Server
     const response = await fetch(URL);
@@ -17,18 +17,20 @@ exports.getTrips = async (req, res, next) => {
     const trips = await response.json();
 
     if (keyword) {
-      const filteredTrips = trips.filter((trip) => {
-        const lcKeyword = keyword.toLowerCase();
-        return (
-          trip.title.toLowerCase().includes(lcKeyword) ||
-          trip.description.toLowerCase().includes(lcKeyword) ||
-          trip.tags.includes(lcKeyword)
-        );
-      });
+      const filteredTrips = trips.filter(
+        (trip) =>
+          trip.title.toLowerCase().includes(keyword) ||
+          trip.description.toLowerCase().includes(keyword) ||
+          trip.tags.reduce(
+            (found, tag) => found || tag.toLowerCase().includes(keyword),
+            false
+          )
+      );
       return res.json(filteredTrips);
+    } else {
+      // keyword is empty
+      return res.json(trips);
     }
-
-    return res.json(trips);
   } catch (error) {
     return res.status(500).json({
       message: error.message,

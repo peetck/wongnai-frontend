@@ -6,21 +6,23 @@ import { useQuery } from "../hooks/query";
 import Trip from "../components/Trip";
 import Loader from "../components/Loader";
 
-const Page = styled.div`
+const S = {};
+
+S.Page = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
   align-items: center;
 `;
 
-const Title = styled.p`
+S.Title = styled.p`
   margin-top: 1em;
   font-size: 60px;
   color: #2c9cda;
   text-align: center;
 `;
 
-const Container = styled.div`
+S.Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -30,7 +32,7 @@ const Container = styled.div`
   }
 `;
 
-const Input = styled.input`
+S.Input = styled.input`
   border: 0;
   border-bottom: 1.5px solid #a1a1a1;
   text-align: center;
@@ -44,7 +46,7 @@ const Input = styled.input`
   }
 `;
 
-const NotFound = styled.h2`
+S.NotFound = styled.p`
   display: flex;
   height: 450px;
   justify-content: center;
@@ -52,74 +54,64 @@ const NotFound = styled.h2`
   color: #a1a1a1;
   text-align: center;
   font-weight: lighter;
+  font-size: 25px;
 `;
+
+const URL = "http://localhost:8000/api/trips";
 
 const Home = () => {
   const history = useHistory();
   const query = useQuery();
 
-  const [keyword, setKeyword] = useState(
-    query.has("keyword") ? query.get("keyword") : ""
-  );
+  console.log(S);
+
+  const [keyword, setKeyword] = useState(query.get("keyword") ?? "");
   const [trips, setTrips] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchTrips = useCallback(async () => {
     try {
-      setIsLoading(true);
-      const response = await fetch(
-        `http://localhost:8000/api/trips?keyword=${keyword}`
-      );
+      const response = await fetch(`${URL}?keyword=${keyword}`);
       if (response.status !== 200) {
         throw new Error("Something went wrong.");
       }
       const data = await response.json();
       setTrips(data);
     } catch (error) {
-      // TODO: handler error
       console.log(error.message);
-    } finally {
-      setIsLoading(false);
     }
   }, [keyword]);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      fetchTrips();
+    setIsLoading(true);
+    const timeout = setTimeout(async () => {
+      await fetchTrips();
+      setIsLoading(false);
     }, 300);
 
     // if this effect run again, because keyword changed, we remove the previous timeout
     return () => clearTimeout(timeout);
   }, [keyword, fetchTrips]);
 
-  const categoryClickedHandler = (e) => {
-    const category = e.target.textContent;
-    setKeyword(category);
-    query.set("keyword", category);
-    history.replace({
-      search: query.toString(),
-    });
-  };
-
-  const inputHandler = (e) => {
-    setKeyword(e.target.value);
-    query.set("keyword", e.target.value);
+  const keywordChangeHandler = (kw) => {
+    setKeyword(kw);
+    query.set("keyword", kw);
     history.replace({
       search: query.toString(),
     });
   };
 
   return (
-    <Page>
-      <Title>เที่ยวไหนดี</Title>
-      <Container>
-        <Input
+    <S.Page>
+      <S.Title>เที่ยวไหนดี</S.Title>
+      <S.Container>
+        <S.Input
           type="text"
           name="keyword"
           id="keyword"
           placeholder="หาที่เที่ยวแล้วไปกัน..."
           value={keyword}
-          onChange={inputHandler}
+          onChange={(e) => keywordChangeHandler(e.target.value)}
         />
         {isLoading ? (
           <Loader />
@@ -133,14 +125,16 @@ const Home = () => {
               photos={trip.photos}
               url={trip.url}
               tags={trip.tags}
-              categoryClickedHandler={categoryClickedHandler}
+              categoryClickedHandler={(e) =>
+                keywordChangeHandler(e.target.textContent)
+              }
             />
           ))
         ) : (
-          <NotFound>ไม่พบที่เที่ยว</NotFound>
+          <S.NotFound>ไม่พบที่เที่ยว</S.NotFound>
         )}
-      </Container>
-    </Page>
+      </S.Container>
+    </S.Page>
   );
 };
 

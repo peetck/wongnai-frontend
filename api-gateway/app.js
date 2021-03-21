@@ -9,6 +9,7 @@ app.use(helmet());
 
 app.use(express.json());
 
+// allow cors
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   next();

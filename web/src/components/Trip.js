@@ -1,7 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-const TripContainer = styled.div`
+const S = {};
+
+S.TripContainer = styled.div`
   display: flex;
   width: 100%;
   height: 450px;
@@ -12,7 +14,7 @@ const TripContainer = styled.div`
   }
 `;
 
-const MainImage = styled.img`
+S.MainImage = styled.img`
   width: 30%;
   object-fit: cover;
   padding: 15px;
@@ -30,14 +32,14 @@ const MainImage = styled.img`
   }
 `;
 
-const Container = styled.div`
+S.Container = styled.div`
   display: flex;
   justify-content: space-between;
   flex-direction: column;
   padding: 15px;
 `;
 
-const Content = styled.div`
+S.Content = styled.div`
   display: flex;
   flex: 1;
   margin-bottom: 15px;
@@ -45,11 +47,11 @@ const Content = styled.div`
   justify-content: space-between;
 `;
 
-const Detail = styled.div`
+S.Detail = styled.div`
   margin-top: 10px;
 `;
 
-const Title = styled.a`
+S.Title = styled.a`
   font-size: 25px;
   font-weight: bold;
   text-decoration: none;
@@ -59,21 +61,21 @@ const Title = styled.a`
   }
 `;
 
-const Description = styled.p`
+S.Description = styled.p`
   color: #a1a1a1;
   font-size: 18px;
   margin-top: 10px;
   font-weight: lighter;
 `;
 
-const ReadMore = styled.a`
+S.ReadMore = styled.a`
   color: #2c9cda;
   &:hover {
     opacity: 0.7;
   }
 `;
 
-const Categories = styled.p`
+S.Categories = styled.p`
   color: #a1a1a1;
   font-size: 16px;
   font-weight: lighter;
@@ -84,7 +86,7 @@ const Categories = styled.p`
   }
 `;
 
-const Underline = styled.span`
+S.Underline = styled.span`
   text-decoration: underline;
   cursor: pointer;
   &:hover {
@@ -92,11 +94,11 @@ const Underline = styled.span`
   }
 `;
 
-const Flex = styled.div`
+S.Flex = styled.div`
   display: flex;
 `;
 
-const Image = styled.img`
+S.Image = styled.img`
   width: 150px;
   height: 150px;
   margin-right: 15px;
@@ -123,41 +125,43 @@ const Trip = (props) => {
   } = props;
 
   return (
-    <TripContainer>
-      <MainImage src={photos[0]} alt="unable to load image" />
-      <Container>
-        <Content>
-          <Detail>
-            <Title href={url} target="_blank" rel="noopener noreferrer">
+    <S.TripContainer>
+      <S.MainImage src={photos[0]} alt="unable to load image" />
+      <S.Container>
+        <S.Content>
+          <S.Detail>
+            <S.Title href={url} target="_blank" rel="noopener noreferrer">
               {title}
-            </Title>
-            <Description>
+            </S.Title>
+            <S.Description>
               {description.split("\n")[0]} ...{" "}
-              <ReadMore href={url} target="_blank" rel="noopener noreferrer">
+              <S.ReadMore href={url} target="_blank" rel="noopener noreferrer">
                 อ่านต่อ
-              </ReadMore>
-            </Description>
-          </Detail>
-          <Categories>
+              </S.ReadMore>
+            </S.Description>
+          </S.Detail>
+          <S.Categories>
             หมวด :{" "}
             {tags.slice(0, tags.length - 1).map((tag) => (
               <span key={eid + tag}>
-                <Underline onClick={categoryClickedHandler}>{tag}</Underline>{" "}
+                <S.Underline onClick={categoryClickedHandler}>
+                  {tag}
+                </S.Underline>{" "}
               </span>
             ))}
             และ{" "}
-            <Underline onClick={categoryClickedHandler}>
+            <S.Underline onClick={categoryClickedHandler}>
               {tags[tags.length - 1]}
-            </Underline>
-          </Categories>
-        </Content>
-        <Flex>
+            </S.Underline>
+          </S.Categories>
+        </S.Content>
+        <S.Flex>
           {photos.slice(1).map((photo) => (
-            <Image key={photo} src={photo} alt="unable to load image" />
+            <S.Image key={photo} src={photo} alt="unable to load image" />
           ))}
-        </Flex>
-      </Container>
-    </TripContainer>
+        </S.Flex>
+      </S.Container>
+    </S.TripContainer>
   );
 };
 

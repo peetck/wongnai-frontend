@@ -94,7 +94,7 @@ S.Underline = styled.span`
   }
 `;
 
-S.Flex = styled.div`
+S.OtherImages = styled.div`
   display: flex;
 `;
 
@@ -120,46 +120,51 @@ const Trip = (props) => {
     description,
     photos,
     url,
+    keywordChangeHandler,
     tags,
-    categoryClickedHandler,
   } = props;
+
+  // trip detail (title, description)
+  const detail = (
+    <S.Detail>
+      <S.Title href={url} target="_blank" rel="noopener noreferrer">
+        {title}
+      </S.Title>
+      <S.Description>
+        {description.split("\n")[0]} ...{" "}
+        <S.ReadMore href={url} target="_blank" rel="noopener noreferrer">
+          อ่านต่อ
+        </S.ReadMore>
+      </S.Description>
+    </S.Detail>
+  );
+
+  // trip categories (tags)
+  const categories = (
+    <S.Categories>
+      หมวด :{" "}
+      {tags.map((tag, index) => (
+        <span key={eid + tag}>
+          <S.Underline onClick={keywordChangeHandler}>{tag}</S.Underline>
+          {index === tags.length - 2 ? " และ " : " "}
+        </span>
+      ))}
+    </S.Categories>
+  );
 
   return (
     <S.TripContainer>
       <S.MainImage src={photos[0]} alt="unable to load image" />
       <S.Container>
         <S.Content>
-          <S.Detail>
-            <S.Title href={url} target="_blank" rel="noopener noreferrer">
-              {title}
-            </S.Title>
-            <S.Description>
-              {description.split("\n")[0]} ...{" "}
-              <S.ReadMore href={url} target="_blank" rel="noopener noreferrer">
-                อ่านต่อ
-              </S.ReadMore>
-            </S.Description>
-          </S.Detail>
-          <S.Categories>
-            หมวด :{" "}
-            {tags.slice(0, tags.length - 1).map((tag) => (
-              <span key={eid + tag}>
-                <S.Underline onClick={categoryClickedHandler}>
-                  {tag}
-                </S.Underline>{" "}
-              </span>
-            ))}
-            และ{" "}
-            <S.Underline onClick={categoryClickedHandler}>
-              {tags[tags.length - 1]}
-            </S.Underline>
-          </S.Categories>
+          {detail}
+          {categories}
         </S.Content>
-        <S.Flex>
+        <S.OtherImages>
           {photos.slice(1).map((photo) => (
             <S.Image key={photo} src={photo} alt="unable to load image" />
           ))}
-        </S.Flex>
+        </S.OtherImages>
       </S.Container>
     </S.TripContainer>
   );

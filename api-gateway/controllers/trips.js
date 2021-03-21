@@ -17,12 +17,14 @@ exports.getTrips = async (req, res, next) => {
     const trips = await response.json();
 
     if (keyword) {
+      // filter trips by keyword
       const filteredTrips = trips.filter(
         (trip) =>
           trip.title.toLowerCase().includes(keyword) ||
           trip.description.toLowerCase().includes(keyword) ||
+          // use reduce to check each tag to see if it include keyword or not.
           trip.tags.reduce(
-            (found, tag) => found || tag.toLowerCase().includes(keyword),
+            (prev, tag) => prev || tag.toLowerCase().includes(keyword),
             false
           )
       );
@@ -32,6 +34,7 @@ exports.getTrips = async (req, res, next) => {
       return res.json(trips);
     }
   } catch (error) {
+    // error occurred
     return res.status(500).json({
       message: error.message,
     });

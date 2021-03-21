@@ -13,7 +13,9 @@ const fade = keyframes`
   }
 `;
 
-const Container = styled.div`
+const S = {};
+
+S.Container = styled.div`
   display: flex;
   width: 100%;
   height: 450px;
@@ -21,7 +23,7 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const Grid = styled.div`
+S.Grid = styled.div`
   display: inline-block;
   position: relative;
   width: 80px;
@@ -83,8 +85,8 @@ const Grid = styled.div`
 
 const Loader = () => {
   return (
-    <Container>
-      <Grid>
+    <S.Container>
+      <S.Grid>
         <div />
         <div />
         <div />
@@ -94,8 +96,8 @@ const Loader = () => {
         <div />
         <div />
         <div />
-      </Grid>
-    </Container>
+      </S.Grid>
+    </S.Container>
   );
 };
 

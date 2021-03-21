@@ -46,7 +46,7 @@ S.Input = styled.input`
   }
 `;
 
-S.NotFound = styled.p`
+S.AltMessage = styled.p`
   display: flex;
   height: 450px;
   justify-content: center;
@@ -57,17 +57,25 @@ S.NotFound = styled.p`
   font-size: 25px;
 `;
 
+S.Reload = styled.a`
+  color: #2c9cda;
+  cursor: pointer;
+  text-decoration: underline;
+  &:hover {
+    opacity: 0.7;
+  }
+`;
+
 const URL = "http://localhost:8000/api/trips";
 
 const Home = () => {
   const history = useHistory();
   const query = useQuery();
 
-  console.log(S);
-
   const [keyword, setKeyword] = useState(query.get("keyword") ?? "");
   const [trips, setTrips] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
   const fetchTrips = useCallback(async () => {
     try {
@@ -78,12 +86,15 @@ const Home = () => {
       const data = await response.json();
       setTrips(data);
     } catch (error) {
-      console.log(error.message);
+      // error occurred
+      setIsError(true);
     }
   }, [keyword]);
 
   useEffect(() => {
     setIsLoading(true);
+
+    // start fetch trips only when user stops typing (300 milliseconds)
     const timeout = setTimeout(async () => {
       await fetchTrips();
       setIsLoading(false);
@@ -95,11 +106,45 @@ const Home = () => {
 
   const keywordChangeHandler = (kw) => {
     setKeyword(kw);
+
+    // set query params (keyword)
     query.set("keyword", kw);
     history.replace({
       search: query.toString(),
     });
   };
+
+  let content;
+
+  if (isLoading) {
+    content = <Loader />;
+  } else if (isError) {
+    // error occurred
+    content = (
+      <S.AltMessage>
+        <span>
+          เกิดข้อผิดพลาดบางอย่าง <br />
+          <S.Reload onClick={() => window.location.reload()}>โหลดใหม่</S.Reload>
+        </span>
+      </S.AltMessage>
+    );
+  } else if (trips.length !== 0) {
+    content = trips.map((trip) => (
+      <Trip
+        key={trip.eid}
+        eid={trip.eid}
+        title={trip.title}
+        description={trip.description}
+        photos={trip.photos}
+        url={trip.url}
+        tags={trip.tags}
+        keywordChangeHandler={(e) => keywordChangeHandler(e.target.textContent)}
+      />
+    ));
+  } else {
+    // not found any trip
+    content = <S.AltMessage>ไม่พบที่เที่ยว</S.AltMessage>;
+  }
 
   return (
     <S.Page>
@@ -113,26 +158,7 @@ const Home = () => {
           value={keyword}
           onChange={(e) => keywordChangeHandler(e.target.value)}
         />
-        {isLoading ? (
-          <Loader />
-        ) : trips.length !== 0 ? (
-          trips.map((trip) => (
-            <Trip
-              key={trip.eid}
-              eid={trip.eid}
-              title={trip.title}
-              description={trip.description}
-              photos={trip.photos}
-              url={trip.url}
-              tags={trip.tags}
-              categoryClickedHandler={(e) =>
-                keywordChangeHandler(e.target.textContent)
-              }
-            />
-          ))
-        ) : (
-          <S.NotFound>ไม่พบที่เที่ยว</S.NotFound>
-        )}
+        {content}
       </S.Container>
     </S.Page>
   );

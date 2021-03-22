@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const helmet = require("helmet");
 
 const app = express();
@@ -9,11 +10,8 @@ app.use(helmet());
 
 app.use(express.json());
 
-// allow cors
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  next();
-});
+// enable all cors requests
+app.use(cors());
 
 app.use("/api", tripsRoutes);
 

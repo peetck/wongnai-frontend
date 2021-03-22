@@ -5,7 +5,7 @@ const URL = "http://localhost:9000/trips";
 exports.getTrips = async (req, res, next) => {
   try {
     // get query parameters
-    const keyword = req.query.keyword.toLowerCase().trim();
+    const keyword = req.query.keyword?.toLowerCase()?.trim();
 
     // send request to JSON Server
     const response = await fetch(URL);

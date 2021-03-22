@@ -1,10 +1,14 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import { useQuery } from "../hooks/query";
-import Trip from "../components/Trip";
+import Trip from "../components/Trip/Trip";
 import Loader from "../components/Loader";
+import { fetchTrips } from "../store/actions/trips";
+import Input from "../components/Input";
+import Alt from "../components/Alt";
 
 const S = {};
 
@@ -32,81 +36,38 @@ S.Container = styled.div`
   }
 `;
 
-S.Input = styled.input`
-  border: 0;
-  border-bottom: 1.5px solid #a1a1a1;
-  text-align: center;
-  font-size: 20px;
-  font-weight: lighter;
-  margin: 25px 0 35px 0;
-  width: 90%;
-  &:focus {
-    outline: none;
-    border-bottom-color: #2c9cda;
-  }
-`;
-
-S.AltMessage = styled.p`
-  display: flex;
-  height: 450px;
-  justify-content: center;
-  align-items: center;
-  color: #a1a1a1;
-  text-align: center;
-  font-weight: lighter;
-  font-size: 25px;
-`;
-
-S.Reload = styled.a`
-  color: #2c9cda;
-  cursor: pointer;
-  text-decoration: underline;
-  &:hover {
-    opacity: 0.7;
-  }
-`;
-
-const URL = "http://localhost:8000/api/trips";
-
 const Home = () => {
   const history = useHistory();
   const query = useQuery();
+  const dispatch = useDispatch();
 
+  // get keyword from query params
   const [keyword, setKeyword] = useState(query.get("keyword") ?? "");
-  const [trips, setTrips] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
-
-  const fetchTrips = useCallback(async () => {
-    try {
-      const response = await fetch(`${URL}?keyword=${keyword}`);
-      if (response.status !== 200) {
-        throw new Error("Something went wrong.");
-      }
-      const data = await response.json();
-      setTrips(data);
-    } catch (error) {
-      // error occurred
-      setIsError(true);
-    }
-  }, [keyword]);
+  // get trips state
+  const trips = useSelector((state) => state.trips);
 
   useEffect(() => {
     setIsLoading(true);
-
     // start fetch trips only when user stops typing (300 milliseconds)
     const timeout = setTimeout(async () => {
-      await fetchTrips();
-      setIsLoading(false);
+      try {
+        // dispatch fetchTrips action
+        await dispatch(fetchTrips(keyword));
+      } catch (error) {
+        // error occurred
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
+      }
     }, 300);
-
     // if this effect run again, because keyword changed, we remove the previous timeout
     return () => clearTimeout(timeout);
-  }, [keyword, fetchTrips]);
+  }, [keyword, dispatch]);
 
   const keywordChangeHandler = (kw) => {
     setKeyword(kw);
-
     // set query params (keyword)
     query.set("keyword", kw);
     history.replace({
@@ -117,18 +78,16 @@ const Home = () => {
   let content;
 
   if (isLoading) {
+    // loading
     content = <Loader />;
   } else if (isError) {
     // error occurred
-    content = (
-      <S.AltMessage>
-        <span>
-          เกิดข้อผิดพลาดบางอย่าง <br />
-          <S.Reload onClick={() => window.location.reload()}>โหลดใหม่</S.Reload>
-        </span>
-      </S.AltMessage>
-    );
-  } else if (trips.length !== 0) {
+    content = <Alt message="เกิดข้อผิดพลาดบางอย่าง" withReload />;
+  } else if (trips.length === 0) {
+    // not found any trip
+    content = <Alt message="ไม่พบที่เที่ยว" />;
+  } else {
+    // found
     content = trips.map((trip) => (
       <Trip
         key={trip.eid}
@@ -141,16 +100,13 @@ const Home = () => {
         keywordChangeHandler={(e) => keywordChangeHandler(e.target.textContent)}
       />
     ));
-  } else {
-    // not found any trip
-    content = <S.AltMessage>ไม่พบที่เที่ยว</S.AltMessage>;
   }
 
   return (
     <S.Page>
       <S.Title>เที่ยวไหนดี</S.Title>
       <S.Container>
-        <S.Input
+        <Input
           type="text"
           name="keyword"
           id="keyword"

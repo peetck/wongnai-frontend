@@ -37,6 +37,7 @@ S.MainImage = styled.img`
 
 S.Container = styled.div`
   display: flex;
+  flex: 1;
   justify-content: space-between;
   flex-direction: column;
   padding: 15px;

@@ -1,10 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
+import { perfectGrayColor } from "../../shared/colors";
+
 const S = {};
 
 S.Container = styled.div`
-  color: #a1a1a1;
+  color: ${perfectGrayColor};
   font-size: 16px;
   font-weight: lighter;
   margin: auto 0;

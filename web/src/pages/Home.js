@@ -9,6 +9,7 @@ import Loader from "../components/Loader";
 import { fetchTrips } from "../store/actions/trips";
 import Input from "../components/Input";
 import Alt from "../components/Alt";
+import { primaryColor } from "../shared/colors";
 
 const S = {};
 
@@ -22,7 +23,7 @@ S.Page = styled.div`
 S.Title = styled.p`
   margin-top: 1em;
   font-size: 60px;
-  color: #2c9cda;
+  color: ${primaryColor};
   text-align: center;
 `;
 

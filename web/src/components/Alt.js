@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
+import { primaryColor, perfectGrayColor } from "../shared/colors";
+
 const S = {};
 
 S.AltMessage = styled.p`
@@ -8,14 +10,14 @@ S.AltMessage = styled.p`
   height: 450px;
   justify-content: center;
   align-items: center;
-  color: #a1a1a1;
+  color: ${perfectGrayColor};
   text-align: center;
   font-weight: lighter;
   font-size: 25px;
 `;
 
 S.Reload = styled.a`
-  color: #2c9cda;
+  color: ${primaryColor};
   cursor: pointer;
   text-decoration: underline;
   &:hover {

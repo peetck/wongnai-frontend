@@ -1,5 +1,7 @@
 import { createGlobalStyle } from "styled-components";
 
+import { perfectGrayColor } from "./shared/colors";
+
 const GlobalStyle = createGlobalStyle`
   * {
     font-family: 'Kanit', sans-serif;
@@ -17,7 +19,7 @@ const GlobalStyle = createGlobalStyle`
   }
   ::-webkit-scrollbar-thumb {
     border-radius: 10px;
-    background-color: #a1a1a1;
+    background-color: ${perfectGrayColor};
   }
 `;
 

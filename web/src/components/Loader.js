@@ -1,6 +1,8 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 
+import { primaryColor } from "../shared/colors";
+
 const fade = keyframes`
   0%{
      opacity: 1;
@@ -33,7 +35,7 @@ S.Grid = styled.div`
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: #2c9cda;
+    background: ${primaryColor};
     animation: ${fade} 1.2s linear infinite;
     &:nth-child(1) {
       top: 8px;

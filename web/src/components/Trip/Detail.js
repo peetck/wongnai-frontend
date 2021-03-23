@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
+import { primaryColor, perfectGrayColor } from "../../shared/colors";
+
 const S = {};
 
 S.Container = styled.div`
@@ -19,14 +21,14 @@ S.Title = styled.a`
 `;
 
 S.Description = styled.p`
-  color: #a1a1a1;
+  color: ${perfectGrayColor};
   font-size: 18px;
   margin-top: 10px;
   font-weight: lighter;
 `;
 
 S.ReadMore = styled.a`
-  color: #2c9cda;
+  color: ${primaryColor};
   &:hover {
     opacity: 0.7;
   }

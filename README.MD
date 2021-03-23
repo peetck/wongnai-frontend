@@ -1,3 +1,29 @@
+# Getting Started
+
+1) json-server:
+    
+    ```
+    $ cd json-server
+    $ npm i
+    $ npm start
+    ```
+    
+2) api-gateway:
+    
+    ```
+    $ cd api-gateway
+    $ npm i
+    $ npm start
+    ```
+    
+3) web:
+    
+    ```
+    $ cd web
+    $ npm i
+    $ npm start
+    ```
+ 
 # Frontend Assignment
 
 แบบทดสอบสำหรับ ผู้สมัครตำแหน่ง Software Engineer, Frontend การทำแบบทดสอบผู้สมัครจะต้องคำนึงถึง กฎสามข้อที่กล่าวไว้ด้านล่างเสมอ เพราะเราเชื่อว่าการพัฒนา Software ที่ดีนั้นไม่เพียงแค่ทำให้ Software ทำงานได้ตาม requirement อย่างเดียว แต่จะต้องคำนึงถึง user และการ maintainance ต่อไปในอนาคตด้วย
